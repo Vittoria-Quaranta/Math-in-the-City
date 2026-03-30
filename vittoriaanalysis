@@ -1,0 +1,95 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+df = pd.read_csv('435data_clean_v3.csv')
+
+# Student loan debt columns by year
+loan_cols = {
+    'Amount of student loans 2011': 2011,
+    'Amount student loans 2013':    2013,
+    'Amount student loans 2015':    2015,
+    'Amount student loans 2017':    2017,
+    'Amount student loans 2019':    2019,
+    'Amount student loans 2021':    2021,
+    'Amount student loans 2023':    2023,
+}
+
+# Savings/accounts columns by year
+savings_cols = {
+    'Amount all accounts 1999': 1999,
+    'Amount all accounts 2001': 2001,
+    'Amount all accounts 2003': 2003,
+    'Amount all accounts 2005': 2005,
+    'Amount all accounts 2007': 2007,
+    'Amount all accounts 2009': 2009,
+    'Amount all accounts 2011': 2011,
+    'Amount all accounts 2013': 2013,
+    'Amount all accounts 2015': 2015,
+    'Amount all accounts 2017': 2017,
+    'Amount ck/saving account 2019':  2019,
+    'Amount ck/savings acct 2021':    2021,
+    'Amount ck/savings account 2023': 2023,
+}
+
+# Stocks/investments columns by year
+stocks_cols = {
+    'Imp value stocks 1984': 1984,
+    'Imp value stocks 1989': 1989,
+    'Imp value stocks 1994': 1994,
+    'Imp value stocks 1999': 1999,
+    'Imp value stocks 2001': 2001,
+    'Imp value stocks 2003': 2003,
+    'Imp value stocks 2005': 2005,
+    'Imp value stocks 2007': 2007,
+    'Imp value stocks 2009': 2009,
+    'Imp value stocks 2011': 2011,
+    'Imp value stocks 2013': 2013,
+    'Imp value stocks 2015': 2015,
+    'Imp value stocks 2017': 2017,
+    'Imp value stocks 2019': 2019,
+    'Imp value stocks 2021': 2021,
+    'Imp value stocks 2023': 2023,
+}
+
+# Rename to readable names
+loan_rename    = {col: f'loan_{yr}'    for col, yr in loan_cols.items()}
+savings_rename = {col: f'savings_{yr}' for col, yr in savings_cols.items()}
+stocks_rename  = {col: f'stocks_{yr}'  for col, yr in stocks_cols.items()}
+
+years = [1999, 2001, 2003, 2005, 2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021, 2023]
+
+
+# Build agg — one row per person, all variables aligned
+all_cols = list(loan_cols) + list(savings_cols) + list(stocks_cols)
+agg = df[all_cols].copy()
+agg = agg.rename(columns={**loan_rename, **savings_rename, **stocks_rename})
+
+# Clean sentinel values (PSID encodes missing as 999999998)
+for col in agg.columns:
+    agg[col] = agg[col].where((agg[col] >= 0) & (agg[col] < 9999990))
+print(agg.head())
+print('\nShape:', agg.shape)
+
+# Calculate average per year, cleaning sentinels
+avg_savings = []
+avg_stocks = []
+
+for yr in years:
+    s = agg[f'savings_{yr}'] if f'savings_{yr}' in agg.columns else pd.Series(dtype=float)
+    avg_savings.append(s.mean())
+
+    st = agg[f'stocks_{yr}'] if f'stocks_{yr}' in agg.columns else pd.Series(dtype=float)
+    avg_stocks.append(st.mean())
+
+# Plot
+plt.figure(figsize=(12, 5))
+plt.plot(years, avg_savings, 'o-', color='steelblue', label='Savings (all accounts)')
+plt.plot(years, avg_stocks,  's-', color='coral',     label='Stocks')
+plt.title('Average Savings vs. Stocks Over Time')
+plt.xlabel('Year')
+plt.ylabel('Average Amount ($)')
+plt.legend()
+plt.xticks(years, rotation=45)
+plt.tight_layout()
+plt.show()
