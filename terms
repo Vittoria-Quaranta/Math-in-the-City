@@ -1,12 +1,68 @@
 Terms to explain
-General:
-- mean
-- median
-- p-test
-- chi-squared test
--
--
--
-Investment: 
-- ROI 
-- 
+
+Statistical & Mathematical Methods
+Logistic regression (binary logistic regression)
+Linear regression / OLS (Ordinary Least Squares)
+Log transformation / log-scaling
+Logit / log-odds
+Coefficient (β)
+Pseudo R²
+P-value / statistical significance
+Standard error
+z-value
+Maximum Likelihood Estimation (MLE)
+Marginal effect / Average Marginal Effect (AME)
+Interaction term
+Heteroskedasticity-robust standard errors (HC3)
+Markov chain / transition matrix
+Total Variation (TV) distance
+Frobenius norm
+Chi-square test of independence
+Mann-Whitney U test
+Kruskal-Wallis test
+Cohen's h / Cohen's d (effect size)
+Paired t-test
+Feature scaling / linear transformation
+LLR p-value (Log-Likelihood Ratio)
+
+Data & Research Concepts
+Survey of Consumer Finances (SCF)
+Panel Study of Income Dynamics (PSID)
+Multiple imputation
+Cross-sectional survey
+Longitudinal study
+Sampling weights / survey weights
+Binary variable / binary indicator
+Control variable
+Robustness check
+Sensitivity analysis
+Subgroup analysis
+Net flow (sink vs. source states)
+Cohort
+
+Financial Terms
+Student debt / education installment debt (EDN_INST)
+Labor force participation
+Quasi-liquid retirement account (RETQLIQ)
+IRA (Individual Retirement Account) — Roth vs. traditional
+Keogh plan
+401(k) / 403(b)
+Tax-advantaged retirement account
+Head of household / Primary Economic Unit (PEU)
+Home value / housing feasibility
+Non-retirement investing
+Debt quartile
+Income percentile
+Return on investment (ROI)
+Debt crowding-out effect
+Income confound
+
+Acronyms & Dataset-Specific Variables
+YY1 (Household ID)
+LF (Labor Force)
+IRAKH
+EDCL / EDNM
+HOUSES
+WGT (survey weight)
+TAS (Transition into Adulthood Supplement)
+SCF Summary Extract Public Data
