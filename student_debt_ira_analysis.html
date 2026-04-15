@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Debt & IRA Analysis — SCF 2022</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a18;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #5f5e5a; margin-bottom: 1.5rem; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    .card {
+      background: #fff;
+      border: 0.5px solid rgba(0,0,0,0.15);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+    .metric {
+      background: #f1efe8;
+      border-radius: 8px;
+      padding: .875rem 1rem;
+    }
+    .metric-label { font-size: 12px; color: #5f5e5a; margin-bottom: 4px; }
+    .metric-value { font-size: 22px; font-weight: 500; color: #1a1a18; }
+    .metric-sub { font-size: 12px; color: #5f5e5a; margin-top: 4px; }
+    .section-title {
+      font-size: 13px; font-weight: 500; color: #5f5e5a;
+      letter-spacing: .04em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .tag {
+      display: inline-block; font-size: 11px;
+      padding: 2px 8px; border-radius: 4px; font-weight: 500;
+    }
+    .tag-debt   { background: #EEEDFE; color: #3C3489; }
+    .tag-nodebt { background: #E1F5EE; color: #085041; }
+    .reg-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
+    }
+    .reg-row:last-child { border-bottom: none; }
+    .reg-label { font-size: 13px; color: #1a1a18; min-width: 140px; }
+    .reg-bar-wrap { flex: 1; height: 10px; background: #f1efe8; border-radius: 5px; overflow: hidden; }
+    .reg-bar { height: 10px; border-radius: 5px; }
+    .reg-val { font-size: 12px; font-weight: 500; min-width: 44px; text-align: right; }
+    .insight-box {
+      background: #f1efe8; border-radius: 8px;
+      padding: 10px 12px; margin-top: 16px;
+    }
+    .insight-box p:first-child { font-size: 12px; color: #5f5e5a; margin-bottom: 4px; }
+    .insight-box p:last-child { font-size: 13px; color: #1a1a18; }
+    @media (max-width: 640px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .grid4 { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Student debt & IRA savings</h1>
+  <p class="subtitle">2022 Survey of Consumer Finances — weighted analysis · 4,595 households</p>
+
+  <div class="grid4" style="margin-bottom:16px">
+    <div class="metric">
+      <p class="metric-label">IRA ownership — no debt</p>
+      <p class="metric-value">32.2%</p>
+      <p class="metric-sub">of households</p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">IRA ownership — has debt</p>
+      <p class="metric-value">27.1%</p>
+      <p class="metric-sub">of households</p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">Mean IRA — no debt</p>
+      <p class="metric-value">$115,869</p>
+      <p class="metric-sub">all households</p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">Mean IRA — has debt</p>
+      <p class="metric-value">$23,719</p>
+      <p class="metric-sub">all households</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px">
+
+    <div class="card">
+      <p class="section-title">IRA ownership rate by age group</p>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="tag tag-nodebt">No student debt</span>
+        <span class="tag tag-debt">Has student debt</span>
+      </div>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="ageChart" role="img" aria-label="IRA ownership rate by age group, comparing households with and without student debt.">IRA rates by age: 18-34 no debt 19.7%, debt 25.1%; 35-44 no debt 28.8%, debt 26.5%; 45-54 no debt 27.7%, debt 28.8%; 55-64 no debt 32.4%, debt 33.1%; 65-74 no debt 43.9%, debt 15.0%.</canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">IRA ownership rate by income group</p>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="tag tag-nodebt">No student debt</span>
+        <span class="tag tag-debt">Has student debt</span>
+      </div>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="incChart" role="img" aria-label="IRA ownership rate by income percentile. At every income level, student debt holders lag behind.">IRA rates by income: Bottom 20% no debt 8.6%, debt 7.7%; 20-39% no debt 18.8%, debt 9.0%; 40-59% no debt 27.5%, debt 23.6%; 60-79% no debt 43.7%, debt 33.4%; 80-89% no debt 59.0%, debt 51.4%; Top 10% no debt 72.0%, debt 52.0%.</canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px">
+
+    <div class="card">
+      <p class="section-title">Mean IRA balance by age group ($)</p>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="balChart" role="img" aria-label="Mean IRA balance by age group. No-debt households show substantially higher balances at older ages.">Mean IRA balances: 18-34 no debt $8,687, debt $7,578; 35-44 no debt $35,700, debt $17,500; 45-54 no debt $79,600, debt $31,180; 55-64 no debt $145,236, debt $73,365; 65-74 no debt $219,562, debt $10,857.</canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Regression: predictors of IRA balance</p>
+      <p style="font-size:12px;color:#5f5e5a;margin-bottom:14px">Scaled coefficients from OLS on log IRA balance (IRA owners only, R²=0.39). Positive = higher balance.</p>
+      <div id="regBars"></div>
+      <div class="insight-box">
+        <p>Logistic regression result</p>
+        <p>Having student debt → <strong style="font-weight:500">28.5% lower odds</strong> of owning an IRA, after controlling for income, age, education, and marital status.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <p class="section-title">Mean IRA balance by income — no debt vs. has debt</p>
+    <div style="position:relative;width:100%;height:200px">
+      <canvas id="incBalChart" role="img" aria-label="Mean IRA balance by income group. Gap is largest at the top income tiers.">Mean IRA by income: Bottom 20% no debt $7,485 vs debt $12,775; 20-39% no debt $22,306 vs $852; 40-59% no debt $47,241 vs $5,115; 60-79% no debt $87,547 vs $29,018; 80-89% no debt $223,632 vs $53,784; Top 10% no debt $603,570 vs $79,209.</canvas>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:#888780;text-align:center">Source: 2022 Survey of Consumer Finances (Federal Reserve). Survey weights applied. Averages across 5 implicates per household.</p>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>
+    const noDebtColor = '#0F6E56';
+    const debtColor   = '#534AB7';
+
+    const ages      = ['18-34','35-44','45-54','55-64','65-74'];
+    const ageNoDebt = [19.7,28.8,27.7,32.4,43.9];
+    const ageDebt   = [25.1,26.5,28.8,33.1,15.0];
+
+    const incGroups = ['Bot. 20%','20-39%','40-59%','60-79%','80-89%','Top 10%'];
+    const incNoDebt = [8.6,18.8,27.5,43.7,59.0,72.0];
+    const incDebt   = [7.7,9.0,23.6,33.4,51.4,52.0];
+
+    const balNoDebt = [8687,35700,79600,145236,219562];
+    const balDebt   = [7578,17500,31180,73365,10857];
+
+    const incBalNoDebt = [7485,22306,47241,87547,223632,603570];
+    const incBalDebt   = [12775,852,5115,29018,53784,79209];
+
+    const baseOpts = {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    };
+
+    function tickPct(v) { return v + '%'; }
+    function tickDollar(v) { return v >= 1000 ? '$' + (v/1000).toFixed(0) + 'k' : '$' + v; }
+
+    new Chart(document.getElementById('ageChart'), {
+      type: 'bar',
+      data: { labels: ages, datasets: [
+        { label: 'No debt', data: ageNoDebt, backgroundColor: noDebtColor, borderRadius: 3 },
+        { label: 'Has debt', data: ageDebt,  backgroundColor: debtColor,   borderRadius: 3 }
+      ]},
+      options: { ...baseOpts, scales: {
+        y: { ticks: { callback: tickPct, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,.06)' }, title: { display: true, text: '% with IRA', font: { size: 11 } } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }}
+    });
+
+    new Chart(document.getElementById('incChart'), {
+      type: 'bar',
+      data: { labels: incGroups, datasets: [
+        { label: 'No debt', data: incNoDebt, backgroundColor: noDebtColor, borderRadius: 3 },
+        { label: 'Has debt', data: incDebt,  backgroundColor: debtColor,   borderRadius: 3 }
+      ]},
+      options: { ...baseOpts, scales: {
+        y: { ticks: { callback: tickPct, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,.06)' } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }}
+    });
+
+    new Chart(document.getElementById('balChart'), {
+      type: 'bar',
+      data: { labels: ages, datasets: [
+        { label: 'No debt', data: balNoDebt, backgroundColor: noDebtColor, borderRadius: 3 },
+        { label: 'Has debt', data: balDebt,  backgroundColor: debtColor,   borderRadius: 3 }
+      ]},
+      options: { ...baseOpts, scales: {
+        y: { ticks: { callback: tickDollar, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,.06)' } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }}
+    });
+
+    new Chart(document.getElementById('incBalChart'), {
+      type: 'bar',
+      data: { labels: incGroups, datasets: [
+        { label: 'No debt', data: incBalNoDebt, backgroundColor: noDebtColor, borderRadius: 3 },
+        { label: 'Has debt', data: incBalDebt,  backgroundColor: debtColor,   borderRadius: 3 }
+      ]},
+      options: { ...baseOpts, scales: {
+        y: { ticks: { callback: tickDollar, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,.06)' } },
+        x: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
+      }}
+    });
+
+    const regs = [
+      { label: 'Age',              coef:  0.718, pos: true  },
+      { label: 'Log income',       coef:  1.310, pos: true  },
+      { label: 'Education level',  coef:  0.194, pos: true  },
+      { label: 'Married',          coef:  0.090, pos: true  },
+      { label: 'Log student debt', coef: -0.250, pos: false },
+      { label: 'Female',           coef: -0.001, pos: false },
+    ];
+    const maxAbs = Math.max(...regs.map(r => Math.abs(r.coef)));
+    const wrap = document.getElementById('regBars');
+    regs.forEach(r => {
+      const pct   = Math.round(Math.abs(r.coef) / maxAbs * 100);
+      const color = r.pos ? noDebtColor : debtColor;
+      wrap.innerHTML += `
+        <div class="reg-row">
+          <span class="reg-label">${r.label}</span>
+          <div class="reg-bar-wrap"><div class="reg-bar" style="width:${pct}%;background:${color}"></div></div>
+          <span class="reg-val" style="color:${color}">${r.coef > 0 ? '+' : ''}${r.coef.toFixed(3)}</span>
+        </div>`;
+    });
+  </script>
+</body>
+</html>
